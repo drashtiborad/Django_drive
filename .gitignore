@@ -1,3 +1,4 @@
 *.pyc
 django_drive/settings.py
 drive/migrations
+.idea/
