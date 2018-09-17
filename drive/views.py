@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render, redirect, reverse
-# from user.views import login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 
+@login_required(login_url='login')
 def data(request):
-    if request.user.is_authenticated:
-        return render(request, 'drive/data.html')
-    return redirect(reverse('login'))
+    return render(request, 'drive/data.html')

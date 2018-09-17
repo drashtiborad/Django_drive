@@ -1,28 +1,11 @@
 from django import forms
 from django.core.validators import RegexValidator
-from django.utils import html
 
+from django_drive.utils import hashed_pwd
 from .models import User
 
 username_validator = RegexValidator('^[A-Za-z0-9_.]+$')
 phone_number_validator = RegexValidator('^[0-9]{10}$')
-
-
-class SubmitButtonWidget(forms.Widget):
-    def render(self, name, value, attrs=None):
-        return '<input type="submit" name="%s" value="%s">' % (html.escape(name), html.escape(value))
-
-
-class SubmitButtonField(forms.Field):
-    def __init__(self, *args, **kwargs):
-        if not kwargs:
-            kwargs = {}
-        kwargs["widget"] = SubmitButtonWidget
-
-        super(SubmitButtonField, self).__init__(*args, **kwargs)
-
-    def clean(self, value):
-        return value
 
 
 class RegistrationFrom(forms.Form):
@@ -62,7 +45,7 @@ class LoginForm(forms.Form):
         email_id = User.objects.filter(email=email)
         if not email_id:
             raise forms.ValidationError("Email id is not registered. Please register")
-        pwd = cleaned_data.get('password')
+        pwd = hashed_pwd(cleaned_data.get('password'))
         password = User.objects.filter(email=email).first()
         if not pwd == password.password:
             raise forms.ValidationError("Incorrect Password")

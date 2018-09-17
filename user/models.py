@@ -6,6 +6,8 @@ import os
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
+from django_drive.utils import hashed_pwd
+
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with no username field."""
@@ -31,7 +33,7 @@ class User(AbstractBaseUser):
     phone_number = models.BigIntegerField()
     profile_picture = models.ImageField(default=os.path.join(os.getenv('HOME'), 'Drive_files', 'profile_pictures',
                                                              'default-profile-img.png'))
-    password = models.CharField(max_length=30)
+    password = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     REQUIRED_FIELDS = []
@@ -44,7 +46,7 @@ class User(AbstractBaseUser):
         db_table = 'user'
 
     def check_password(self, raw_password):
-        return self.password == raw_password
+        return self.password == hashed_pwd(raw_password)
 
 
 class File(models.Model):
