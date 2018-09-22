@@ -1,0 +1,14 @@
+<!doctype html>
+<title>
+    Upload New File
+</title>
+<h1> Upload new file </h1>
+{% load crispy_forms_tags %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <!--<p><input type="file" name="file">-->
+        <input type="hidden" name="parent_path" value="{{ path }}">
+        <input type="submit" value="Upload">
+    </p>
+</form>

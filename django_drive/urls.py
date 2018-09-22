@@ -18,8 +18,8 @@ from django.contrib import admin
 
 
 urlpatterns = [
-    url(r'',include('user.urls'), name='user'),
-    url(r'',include('drive.urls'), name='drive-data'),
+    url(r'', include('user.urls'), name='user'),
+    url(r'', include('drive.urls'), name='drive-data'),
     url(r'^admin/', admin.site.urls)
 
 ]

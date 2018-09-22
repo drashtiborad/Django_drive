@@ -2,7 +2,7 @@ from django import forms
 from django.core.validators import RegexValidator
 
 from django_drive.utils import hashed_pwd
-from .models import User
+from .models import User, File
 
 username_validator = RegexValidator('^[A-Za-z0-9_.]+$')
 phone_number_validator = RegexValidator('^[0-9]{10}$')
@@ -49,3 +49,9 @@ class LoginForm(forms.Form):
         password = User.objects.filter(email=email).first()
         if not pwd == password.password:
             raise forms.ValidationError("Incorrect Password")
+
+
+class UploadFile(forms.ModelForm):
+    class Meta:
+        model = File
+        fields = ('filename', )

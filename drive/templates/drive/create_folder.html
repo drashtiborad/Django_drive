@@ -1,0 +1,12 @@
+<!doctype html>
+<title>
+    Create Folder
+</title>
+<h1> Create Folder </h1>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <p><input type="text" name="folder">
+        <input type="hidden" name="parent_path" value="{{ path }}">
+        <input type="submit" value="Create">
+    </p>
+</form>

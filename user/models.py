@@ -53,14 +53,14 @@ class File(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey('User', on_delete=models.CASCADE)
     child_path = models.CharField(max_length=255)
-    parent_path = models.CharField(default=os.path.join(os.getenv('HOME'), 'Drive_files', 'files'), max_length=2048)
-    original_path = models.CharField(default=os.path.join(os.getenv('HOME'), 'Drive_files', 'files'), max_length=2048)
+    parent_path = models.CharField(default=os.path.join(os.getenv('HOME'), 'data/djando_drive'), max_length=2048)
+    original_path = models.CharField(default=os.path.join(os.getenv('HOME'), 'data/djando_drive'), max_length=2048)
     file_type = models.CharField(max_length=30)
-    filename = models.CharField(max_length=1024)
+    filename = models.FileField(max_length=1024, upload_to='django_drive/')
     size = models.BigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    deleted_at = models.DateTimeField()
+    deleted_at = models.DateTimeField(null=True)
 
     class Meta:
         db_table = 'file'

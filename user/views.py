@@ -15,7 +15,7 @@ def register(request):
     :return: rendered template
     """
     if request.user.is_authenticated:
-        return redirect(reverse(data))
+        return redirect(reverse(data, args=('home/',)))
     if request.method == "POST":
         form = RegistrationFrom(request.POST)
         if form.is_valid():
@@ -34,7 +34,7 @@ def register(request):
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect(reverse(data))
+        return redirect(reverse(data, args=('home/',)))
     if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -44,7 +44,7 @@ def login(request):
             if user:
                 initiate_login(request, user)
             messages.success(request, 'You have logged in successfully')
-            return redirect(reverse(data))
+            return redirect(reverse(data, args=('home/',)))
     else:
         form = LoginForm()
     return render(request, 'user/login.html', {'form': form})
