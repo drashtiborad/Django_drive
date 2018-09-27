@@ -1,3 +1,5 @@
+import os
+
 from django import forms
 from django.core.validators import RegexValidator
 
@@ -55,3 +57,20 @@ class UploadFile(forms.ModelForm):
     class Meta:
         model = File
         fields = ('filename', )
+
+
+class UpdateAccountForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=15, min_length=7, required=True,
+                               validators=[username_validator])
+    email = forms.EmailField(label='Email', required=True, widget=forms.TextInput(attrs={'readonly': 'readonly'}))
+    phone_number = forms.CharField(label='Phone number', required=True, validators=[phone_number_validator])
+    date_of_birth = forms.DateField(label='Date of Birth', required=True)
+    profile_picture = forms.ImageField(label='Profile Picture')
+
+    def clean(self):
+        cleaned_data = super(UpdateAccountForm, self).clean()
+        username = cleaned_data.get('username')
+        user = User.objects.filter(username=username).first()
+        if user and username != user.username:
+            raise forms.ValidationError("Username already exists. Please choose another")
+        return cleaned_data

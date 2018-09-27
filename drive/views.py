@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import os
 import mimetypes
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -24,7 +25,6 @@ def get_user_files(request, parent_path):
 
 @login_required(login_url='login')
 def download_file(request, id=None):
-    # import pdb;pdb.set_trace()
     try:
         if id:
             file = File.objects.filter(id=id)[0]
@@ -41,8 +41,22 @@ def download_file(request, id=None):
 
 
 @login_required(login_url='login')
+def delete_file(request, id):
+    try:
+        if id:
+            file = File.objects.filter(id=id)[0]
+            if request.user.id == file.user_id and file:
+                path = file.parent_path
+                file.deleted_at = datetime.now()
+                file.save()
+                return redirect(reverse('data', args=(path,)))
+    except:
+        Http404
+
+
+@login_required(login_url='login')
 def data(request, path='home/'):
-    content = {'path': path, 'files': get_user_files(request, path) }
+    content = {'path': path, 'files': get_user_files(request, path), 'func': get_user_files}
     return render(request, 'drive/data.html', content)
 
 
@@ -76,7 +90,7 @@ def create_folder(request, path='home/'):
         # import pdb;pdb.set_trace()
         parent_path = request.POST.get('parent_path')
         child_path = request.POST.get('folder')
-        if not File.objects.filter(parent_path=parent_path.strip('/') + '/', child_path=child_path):
+        if not File.objects.filter(parent_path=parent_path.strip('/') + '/', child_path=child_path, deleted_at=None) :
             file_type = 'dir'
             file = File(user_id=request.user.id, child_path=child_path, parent_path=parent_path.strip('/') + '/',
                         file_type=file_type, filename=child_path)

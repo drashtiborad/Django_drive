@@ -31,8 +31,7 @@ class User(AbstractBaseUser):
     email = models.EmailField(unique=True)
     date_of_birth = models.DateField()
     phone_number = models.BigIntegerField()
-    profile_picture = models.ImageField(default=os.path.join(os.getenv('HOME'), 'Drive_files', 'profile_pictures',
-                                                             'default-profile-img.png'))
+    profile_picture = models.ImageField(default='default.jpeg', upload_to='profile_pics')
     password = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
