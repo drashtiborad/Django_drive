@@ -5,7 +5,9 @@ import os
 
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 
+from django_drive.settings import SECRET_KEY
 from django_drive.utils import hashed_pwd
 
 
@@ -46,6 +48,19 @@ class User(AbstractBaseUser):
 
     def check_password(self, raw_password):
         return self.password == hashed_pwd(raw_password)
+
+    def generate_token(self, expires_sec=900):
+        serializer = Serializer(SECRET_KEY, expires_sec)
+        return serializer.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+        serializer = Serializer(SECRET_KEY)
+        try:
+            user_id = serializer.loads(token)['user_id']
+        except:
+            return
+        return User.objects.get(id=user_id)
 
 
 class File(models.Model):

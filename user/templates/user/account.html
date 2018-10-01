@@ -8,6 +8,7 @@
         <div class="media-body">
             <h2 class="account-heading">User :  {{ user.username }} </h2>
             <p class="text-secondary">Email : {{user.email}} </p>
+            <a href="{% url 'change_password' token='-'%}">Change Password</a>
         </div>
     </div>
     <form method="POST" enctype="multipart/form-data">

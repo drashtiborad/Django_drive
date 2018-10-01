@@ -8,7 +8,7 @@
     {% csrf_token %}
     {{ form|crispy }}
     <!--<p><input type="file" name="file">-->
-        <input type="hidden" name="parent_path" value="{{ path }}">
-        <input type="submit" value="Upload">
+    <input type="hidden" name="parent_path" value="{{ path }}">
+    <input type="submit" value="Upload">
     </p>
 </form>

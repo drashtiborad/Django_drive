@@ -14,7 +14,8 @@
     </form>
     <div class="border-top pt-3">
         <small class="text-muted">
-            Don't Have An Account? <a class="ml-2" href="#">Register Here</a>
+            Don't Have An Account? <a class="ml-2" href="{% url 'register' %}">Register Here</a>
+            <a class="ml-2" href="{% url 'reset_password' %}">Forgot Password</a>
         </small>
     </div>
 </div>

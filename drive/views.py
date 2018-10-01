@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-import os
+
 import mimetypes
+import os
 from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, reverse
-from django.http import HttpResponse, Http404
+from django.http import Http404, HttpResponse
+from django.shortcuts import redirect, render, reverse
 
 from user.forms import UploadFile
 from user.models import File
@@ -29,11 +30,11 @@ def download_file(request, id=None):
         if id:
             file = File.objects.filter(id=id)[0]
             mimetype = mimetypes.guess_type(os.path.join(os.getenv('HOME'), 'data', 'django_drive',
-                        file.filename.name))[0] or 'application/octet-stream'
+                                                         file.filename.name))[0] or 'application/octet-stream'
             if request.user.id == file.user_id:
                 with open(os.path.join(os.getenv('HOME'), 'data', file.filename.name), 'rb') as f:
                     response = HttpResponse(f.read(), content_type=mimetype)
-                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(file.child_path)
+                    response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file.child_path)
                     return response
         raise Http404
     except:
@@ -90,7 +91,7 @@ def create_folder(request, path='home/'):
         # import pdb;pdb.set_trace()
         parent_path = request.POST.get('parent_path')
         child_path = request.POST.get('folder')
-        if not File.objects.filter(parent_path=parent_path.strip('/') + '/', child_path=child_path, deleted_at=None) :
+        if not File.objects.filter(parent_path=parent_path.strip('/') + '/', child_path=child_path, deleted_at=None):
             file_type = 'dir'
             file = File(user_id=request.user.id, child_path=child_path, parent_path=parent_path.strip('/') + '/',
                         file_type=file_type, filename=child_path)
@@ -102,6 +103,3 @@ def create_folder(request, path='home/'):
             return redirect(reverse(data, args=(parent_path,)))
     else:
         return render(request, 'drive/create_folder.html', {'path': path})
-
-
-

@@ -1,38 +1,37 @@
 {% extends "user/layout.html" %}
-<!--{% load get_user_files %}-->
 {% block content %}
-    <legend class="border-bottom mb-4"> Welcome to Drive!!</legend>
-    <div class="navbar-nav">
-        <a class="nav-item nav-link" href="{% url 'upload_file' path %}">Upload</a>
-        <a class="nav-item nav-link" href="{% url 'create_folder' path %}">Create Folder</a>
-    </div>
-    {% if files %}
-        {% for file in files %}
-            <article class="media content-section">
-                {% if file.file_type == 'dir' %}
-                <div class="media-body">
-                    <h2><a class="article-title"
-                           href="{% url 'data' path=file.parent_path|add:file.child_path|add:'/' %}">
-                        {{file.child_path }}</a></h2>
-                    <div class="article-metadata">
-                        <a class="mr-2" href="#">{{ file.size }}</a>
-                        <small class="text-muted">{{ file.file_type }}</small>
-                        <a class="mr-2" href="{% url 'delete_file' id=file.id %}">Delete</a>
+<legend class="border-bottom mb-4"> Welcome to Drive!!</legend>
+<div class="navbar-nav">
+    <a class="nav-item nav-link" href="{% url 'upload_file' path %}">Upload</a>
+    <a class="nav-item nav-link" href="{% url 'create_folder' path %}">Create Folder</a>
+</div>
+{% if files %}
+{% for file in files %}
+<article class="media content-section">
+    {% if file.file_type == 'dir' %}
+    <div class="media-body">
+        <h2><a class="article-title"
+               href="{% url 'data' path=file.parent_path|add:file.child_path|add:'/' %}">
+            {{file.child_path }}</a></h2>
+        <div class="article-metadata">
+            <a class="mr-2" href="#">{{ file.size }}</a>
+            <small class="text-muted">{{ file.file_type }}</small>
+            <a class="mr-2" href="{% url 'delete_file' id=file.id %}">Delete</a>
 
-                    </div>
-                </div>
-                {% else %}
-                <div class="media-body">
-                    <h2><a class="article-title"
-                           href="{% url 'download_file' id=file.id %}">{{file.child_path }}</a></h2>
-                    <div class="article-metadata">
-                        <small class="text-muted">{{ file.size }}</small>
-                        <small class="text-muted">{{ file.file_type }}</small>
-                        <a class="mr-2" href="{% url 'delete_file' id=file.id %}">Delete</a>
-                    </div>
-                </div>
-                {% endif %}
-            </article>
-        {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="media-body">
+        <h2><a class="article-title"
+               href="{% url 'download_file' id=file.id %}">{{file.child_path }}</a></h2>
+        <div class="article-metadata">
+            <small class="text-muted">{{ file.size }}</small>
+            <small class="text-muted">{{ file.file_type }}</small>
+            <a class="mr-2" href="{% url 'delete_file' id=file.id %}">Delete</a>
+        </div>
+    </div>
     {% endif %}
+</article>
+{% endfor %}
+{% endif %}
 {% endblock content%}
