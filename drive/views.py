@@ -57,7 +57,7 @@ def delete_file(request, id):
 
 @login_required(login_url='login')
 def data(request, path='home/'):
-    content = {'path': path, 'files': get_user_files(request, path), 'func': get_user_files}
+    content = {'path': path, 'files': get_user_files(request, path)}
     return render(request, 'drive/data.html', content)
 
 
@@ -88,7 +88,6 @@ def upload_file(request, path='home/'):
 @login_required(login_url='login')
 def create_folder(request, path='home/'):
     if request.method == 'POST':
-        # import pdb;pdb.set_trace()
         parent_path = request.POST.get('parent_path')
         child_path = request.POST.get('folder')
         if not File.objects.filter(parent_path=parent_path.strip('/') + '/', child_path=child_path, deleted_at=None):

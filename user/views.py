@@ -157,7 +157,6 @@ def change_password(request, token):
         """
         For logged in users
         """
-        import pdb;pdb.set_trace()
         if request.method == "GET":
             form = ChangePassword()
             return render(request, 'user/change_password.html', {'form': form})
